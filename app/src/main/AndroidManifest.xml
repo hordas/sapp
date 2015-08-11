@@ -35,6 +35,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="udatraining.dyomin.com.udaproj1.MainActivity" />
         </activity>
+        <provider
+            android:authorities="udatraining.dyomin.com.udaproj1"
+            android:name=".data.WeatherProvider">
+        </provider>
     </application>
 
 </manifest>
