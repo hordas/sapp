@@ -17,6 +17,7 @@ package udatraining.dyomin.com.udaproj1.data;
 
 import android.annotation.TargetApi;
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -36,9 +37,11 @@ public class WeatherProvider extends ContentProvider {
     static final int LOCATION = 300;
 
     private static final SQLiteQueryBuilder sWeatherByLocationSettingQueryBuilder;
+    private static final SQLiteQueryBuilder sLocationQueryBuilder;
 
     static{
         sWeatherByLocationSettingQueryBuilder = new SQLiteQueryBuilder();
+        sLocationQueryBuilder = new SQLiteQueryBuilder();
         
         //This is an inner join which looks like
         //weather INNER JOIN location ON weather.location_id = location._id
@@ -49,6 +52,8 @@ public class WeatherProvider extends ContentProvider {
                         "." + WeatherContract.WeatherEntry.COLUMN_LOC_KEY +
                         " = " + WeatherContract.LocationEntry.TABLE_NAME +
                         "." + WeatherContract.LocationEntry._ID);
+
+        sLocationQueryBuilder.setTables(WeatherContract.LocationEntry.TABLE_NAME);
     }
 
     //location.location_setting = ?
@@ -188,12 +193,26 @@ public class WeatherProvider extends ContentProvider {
             }
             // "weather"
             case WEATHER: {
-                retCursor = null;
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        WeatherContract.WeatherEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
                 break;
             }
             // "location"
             case LOCATION: {
-                retCursor = null;
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        WeatherContract.LocationEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
                 break;
             }
 
@@ -223,6 +242,17 @@ public class WeatherProvider extends ContentProvider {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
             }
+
+            case LOCATION: {
+                long _id = db.insert(WeatherContract.LocationEntry.TABLE_NAME, null, values);
+                if (_id > 0) {
+                    returnUri = WeatherContract.LocationEntry.buildLocationUri(_id);
+                } else {
+                    throw new android.database.SQLException("Failed to insert row int " + uri);
+                }
+                break;
+            }
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
