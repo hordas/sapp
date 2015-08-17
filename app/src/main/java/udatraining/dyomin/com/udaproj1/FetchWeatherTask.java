@@ -1,4 +1,4 @@
-/*
+package udatraining.dyomin.com.udaproj1;/*
  * Copyright (C) 2014 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package udatraining.dyomin.com.udaproj1;
+
 
 import android.content.ContentValues;
 import android.content.Context;

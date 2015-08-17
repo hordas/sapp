@@ -92,42 +92,6 @@ public class ForecastFragment extends Fragment {
         return rootView;
     }
 
-    public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
-
-        private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
-        final String QUERY_PARAM = "q";
-        final String FORMAT_PARAM = "mode";
-        final String UNITS_PARAM = "units";
-        final String DAYS_PARAM = "cnt";
-
-        @Override
-        protected String[] doInBackground(String ... params) {
-            String postalCode = params[0];
-            String responseString = connect(postalCode);
-            String[] parsedWeather = null;
-            try {
-                parsedWeather = getWeatherDataFromJson(responseString, 7);
-            } catch (JSONException e) {
-                Log.e(LOG_TAG, e.toString());
-            }
-            return parsedWeather;
-        }
-
-        @Override
-        protected void onPostExecute(String[] forecastResults) {
-            ArrayList<String> asForecastList = new ArrayList<>(Arrays.asList(forecastResults));
-
-            if (forecastResults != null && forecastAdapter != null) {
-                forecastAdapter.clear();
-                forecastAdapter.addAll(asForecastList);
-            } else if (forecastAdapter == null) {
-                forecastAdapter = new ArrayAdapter<>(getActivity(),
-                        R.layout.list_item_forecast, R.id.list_item_forecast_textview,
-                        asForecastList);
-                lv.setAdapter(forecastAdapter);
-            }
-        }
-
         private String getReadableDateString(long time){
             // Because the API returns a unix timestamp (measured in seconds),
             // it must be converted to milliseconds in order to be converted to valid date.
@@ -222,7 +186,7 @@ public class ForecastFragment extends Fragment {
             }
             return resultStrs;
 
-        }
+
 
         private String connect(String postalCode) {
             HttpURLConnection urlConnection = null;
