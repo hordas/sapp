@@ -1,8 +1,13 @@
 package udatraining.dyomin.com.udaproj1;
 
-import android.app.Fragment;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,15 +19,20 @@ import android.view.ViewGroup;
 import android.support.v7.widget.ShareActionProvider;
 import android.widget.TextView;
 
+import java.sql.Time;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class DetailActivityFragment extends Fragment {
+public class DetailActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private String forecastString;
     private final String FORECAST_SHARE_HASHTAG = " #SunshineApp";
     private final String LOG_TAG = DetailActivity.class.getSimpleName();
+    private final int DETAILS_LOADER = 1;
+    private TextView forecastTextView;
 
     public DetailActivityFragment() {
         setHasOptionsMenu(true);
@@ -32,8 +42,8 @@ public class DetailActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_detail, container, false);
-        forecastString = getActivity().getIntent().getStringExtra("forecast");
-        ((TextView) v.findViewById(R.id.textview_forecast_detailed_fragment)).setText(forecastString);
+        forecastTextView = ((TextView) v.findViewById(R.id.textview_forecast_detailed_fragment));
+        getLoaderManager().initLoader(DETAILS_LOADER, null, this);
         return v;
     }
 
@@ -56,5 +66,34 @@ public class DetailActivityFragment extends Fragment {
         shareIntent.setType("text/plain");
         shareIntent.putExtra(Intent.EXTRA_TEXT, forecastString + FORECAST_SHARE_HASHTAG);
         return shareIntent;
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Intent intent = getActivity().getIntent();
+        Uri uri = null;
+        if (intent != null) {
+            uri = Uri.parse(intent.getDataString());
+        }
+        return new CursorLoader(getActivity(), uri, ForecastFragment.FORECAST_COLUMNS, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if (data.moveToFirst()) {
+            forecastString = data.getLong(ForecastFragment.COL_WEATHER_DATE) + " - "
+                    + data.getString(ForecastFragment.COL_WEATHER_MAX_TEMP) + " / "
+                    + data.getString(ForecastFragment.COL_WEATHER_MIN_TEMP) + " - "
+                    + data.getString(ForecastFragment.COL_WEATHER_DESC);
+            forecastTextView.setText(forecastString);
+        } else {
+            forecastTextView.setText("Unable to download results.");
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        forecastTextView.setText("");
+        forecastString = "";
     }
 }
