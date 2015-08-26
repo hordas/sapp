@@ -33,6 +33,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     private final String LOG_TAG = DetailActivity.class.getSimpleName();
     private final int DETAILS_LOADER = 1;
     private TextView forecastTextView;
+    private ShareActionProvider actionProvider;
 
     public DetailActivityFragment() {
         setHasOptionsMenu(true);
@@ -51,12 +52,10 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.detail, menu);
         MenuItem item = menu.findItem(R.id.action_share);
-        ShareActionProvider actionProvider = (ShareActionProvider)
+        actionProvider = (ShareActionProvider)
                 MenuItemCompat.getActionProvider(item);
         if (actionProvider != null) {
             actionProvider.setShareIntent(createShareIntent());
-        } else {
-            Log.d(LOG_TAG, "Share Action Provide is null?");
         }
     }
 
@@ -81,13 +80,17 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data.moveToFirst()) {
-            forecastString = data.getLong(ForecastFragment.COL_WEATHER_DATE) + " - "
+            forecastString = Utility.formatDate(data.getLong(ForecastFragment.COL_WEATHER_DATE))
+                    + " - "
                     + data.getString(ForecastFragment.COL_WEATHER_MAX_TEMP) + " / "
                     + data.getString(ForecastFragment.COL_WEATHER_MIN_TEMP) + " - "
                     + data.getString(ForecastFragment.COL_WEATHER_DESC);
             forecastTextView.setText(forecastString);
         } else {
             forecastTextView.setText("Unable to download results.");
+        }
+        if (actionProvider != null) {
+            actionProvider.setShareIntent(createShareIntent());
         }
     }
 
