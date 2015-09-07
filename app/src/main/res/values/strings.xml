@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="http://schemas.android.com/apk/res-auto">
     <string name="app_name">UdaProj1</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -20,6 +20,16 @@
     <string name="title_share">Share</string>
 
     <string name="action_preferred_location">Preferred location</string>
+    
+    <string name="today">Today</string>
+    <!-- Date label when displaying tomorrow's weather forecast [CHAR LIMIT=20] -->
+    <string name="tomorrow">Tomorrow</string>
+    
+    <string name="format_full_friendly_date">
+        <xliff:g id="day">%1$s</xliff:g>,
+        <xliff:g id="date">%2$s</xliff:g>
+    </string>
+
 
 
 </resources>
