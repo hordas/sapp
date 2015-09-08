@@ -80,11 +80,16 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data.moveToFirst()) {
-            forecastString = Utility.formatDate(data.getLong(ForecastFragment.COL_WEATHER_DATE))
-                    + " - "
-                    + data.getString(ForecastFragment.COL_WEATHER_MAX_TEMP) + " / "
-                    + data.getString(ForecastFragment.COL_WEATHER_MIN_TEMP) + " - "
-                    + data.getString(ForecastFragment.COL_WEATHER_DESC);
+            boolean isMetric = Utility.isMetric(getActivity());
+            String dateString = Utility.formatDate(data.getLong(ForecastFragment.COL_WEATHER_DATE));
+            String weatherDescription = data.getString(ForecastFragment.COL_WEATHER_DESC);
+            String high = Utility.formatTemperature(getActivity(),
+                    data.getDouble(ForecastFragment.COL_WEATHER_MAX_TEMP), isMetric);
+            String low = Utility.formatTemperature(getActivity(),
+                    data.getDouble(ForecastFragment.COL_WEATHER_MIN_TEMP), isMetric);
+
+            forecastString = String.format("%s - %s - %s/%s", dateString, weatherDescription, high,
+                    low);
             forecastTextView.setText(forecastString);
         } else {
             forecastTextView.setText("Unable to download results.");
