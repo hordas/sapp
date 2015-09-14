@@ -9,7 +9,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,11 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v7.widget.ShareActionProvider;
+import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.sql.Time;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -32,8 +28,17 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     private final String FORECAST_SHARE_HASHTAG = " #SunshineApp";
     private final String LOG_TAG = DetailActivity.class.getSimpleName();
     private final int DETAILS_LOADER = 1;
-    private TextView forecastTextView;
     private ShareActionProvider actionProvider;
+
+    private TextView dayTextview;
+    private TextView dateTextview;
+    private TextView maxTempTextview;
+    private TextView minTempTextview;
+    private TextView descriptionTextview;
+    private TextView humidityTextview;
+    private TextView windTextview;
+    private TextView pressureTextview;
+    private ImageView image;
 
     public DetailActivityFragment() {
         setHasOptionsMenu(true);
@@ -43,7 +48,16 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_detail, container, false);
-        forecastTextView = ((TextView) v.findViewById(R.id.textview_forecast_detailed_fragment));
+        dayTextview = (TextView) v.findViewById(R.id.textview_day_of_week_fragment_detail);
+        dateTextview = (TextView) v.findViewById(R.id.textview_date_fragment_detail);
+        maxTempTextview = (TextView) v.findViewById(R.id.textview_max_temp_fragment_detail);
+        minTempTextview = (TextView) v.findViewById(R.id.textview_min_temp_fragment_detail);
+        descriptionTextview = (TextView) v.findViewById(R.id.textview_forecast_description_detail_fragment);
+        humidityTextview = (TextView) v.findViewById(R.id.textview_humidity_detail_fragment);
+        windTextview = (TextView) v.findViewById(R.id.textview_wind_detail_fragment);
+        pressureTextview = (TextView) v.findViewById(R.id.textview_pressure_detail_fragment);
+        image = (ImageView) v.findViewById(R.id.imageview_icon_detail_fragment);
+
         getLoaderManager().initLoader(DETAILS_LOADER, null, this);
         return v;
     }
@@ -81,18 +95,39 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data.moveToFirst()) {
             boolean isMetric = Utility.isMetric(getActivity());
-            String dateString = Utility.formatDate(data.getLong(ForecastFragment.COL_WEATHER_DATE));
-            String weatherDescription = data.getString(ForecastFragment.COL_WEATHER_DESC);
-            String high = Utility.formatTemperature(getActivity(),
-                    data.getDouble(ForecastFragment.COL_WEATHER_MAX_TEMP), isMetric);
-            String low = Utility.formatTemperature(getActivity(),
-                    data.getDouble(ForecastFragment.COL_WEATHER_MIN_TEMP), isMetric);
+            long date = data.getLong(ForecastFragment.COL_WEATHER_DATE);
+            String dayString = Utility.getDayName(getActivity(), date);
+            String dateString = Utility.getFormattedMonthDay(getActivity(), date);
+            dayTextview.setText(dayString);
+            dateTextview.setText(dateString);
 
-            forecastString = String.format("%s - %s - %s/%s", dateString, weatherDescription, high,
-                    low);
-            forecastTextView.setText(forecastString);
+            double maxTemp = data.getDouble(ForecastFragment.COL_WEATHER_MAX_TEMP);
+            maxTempTextview.setText(Utility.formatTemperature(getActivity(), maxTemp, isMetric));
+
+            double minTemp = data.getDouble(ForecastFragment.COL_WEATHER_MIN_TEMP);
+            minTempTextview.setText(Utility.formatTemperature(getActivity(), minTemp, isMetric));
+
+            String description = data.getString(ForecastFragment.COL_WEATHER_DESC);
+            descriptionTextview.setText(description);
+
+            int humidityFormat = R.string.format_humidity;
+            double humidity = data.getDouble(ForecastFragment.COL_WEATHER_HUMIDITY);
+            humidityTextview.setText(String.format(getActivity().getString(humidityFormat), humidity));
+
+            float windSpeed = data.getFloat(ForecastFragment.COL_WEATHER_WIND_SPEED);
+            float degrees = data.getFloat(ForecastFragment.COL_WEATHER_DEGREES);
+            String windString = Utility.getFormattedWind(getActivity(), windSpeed, degrees);
+            windTextview.setText(windString);
+
+            float pressure = data.getFloat(ForecastFragment.COL_WEATHER_PRESSURE);
+            int pressureFormatId = R.string.pressure_format;
+            pressureTextview.setText(String.format(getActivity().getString(pressureFormatId), pressure));
+
+            int weatherConditionId = data.getInt(ForecastFragment.COL_WEATHER_CONDITION_ID);
+            int resourceId = Utility.getArtResourceForWeatherCondition(weatherConditionId);
+            image.setImageResource(resourceId);
         } else {
-            forecastTextView.setText("Unable to download results.");
+            dateTextview.setText("Unable to download results.");
         }
         if (actionProvider != null) {
             actionProvider.setShareIntent(createShareIntent());
@@ -101,7 +136,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        forecastTextView.setText("");
+        dateTextview.setText("");
         forecastString = "";
     }
 }

@@ -30,8 +30,24 @@
         <xliff:g id="date">%2$s</xliff:g>
     </string>
 
+    <!-- Format temperature -->
     <string name="format_temperature"><xliff:g id="temp">%1.0f</xliff:g>\u00B0</string>
 
+    <!-- Wind format -->
+    <string name="format_wind_mph">
+        Wind: <xliff:g id="speed">%1$1.0f</xliff:g>
+         mph <xliff:g id="direction">%2$s</xliff:g>
+    </string>
 
+    <string name="format_wind_kmh">
+        Wind: <xliff:g id="speed">%1$1.0f</xliff:g>
+         kmh <xliff:g id="direction">%2$s</xliff:g>
+    </string>
+
+    <!-- Pressure format -->
+    <string name="pressure_format">Pressure: <xliff:g id="pressure">%1.0f</xliff:g> hPa</string>
+    
+    <!-- Humidity format -->
+    <string name="format_humidity">Humidity: <xliff:g id="humidity">%1.0f</xliff:g> %%</string>
 
 </resources>
