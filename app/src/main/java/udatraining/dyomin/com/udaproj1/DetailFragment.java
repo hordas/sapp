@@ -19,16 +19,19 @@ import android.support.v7.widget.ShareActionProvider;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import udatraining.dyomin.com.udaproj1.data.WeatherContract;
+
 /**
  * A placeholder fragment containing a simple view.
  */
-public class DetailActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private String forecastString;
     private final String FORECAST_SHARE_HASHTAG = " #SunshineApp";
     private final String LOG_TAG = DetailActivity.class.getSimpleName();
     private final int DETAILS_LOADER = 1;
     private ShareActionProvider actionProvider;
+    Uri mUri;
 
     private TextView dayTextview;
     private TextView dateTextview;
@@ -40,7 +43,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     private TextView pressureTextview;
     private ImageView image;
 
-    public DetailActivityFragment() {
+    public DetailFragment() {
         setHasOptionsMenu(true);
     }
 
@@ -81,14 +84,27 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
         return shareIntent;
     }
 
+    void onLocationChanged(String newLocation) {
+        Uri uri = mUri;
+        if (null != uri) {
+            long date = WeatherContract.WeatherEntry.getDateFromUri(uri);
+            Uri updateUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(newLocation, date);
+            mUri = updateUri;
+            getLoaderManager().restartLoader(DETAILS_LOADER, null, this);
+        }
+    }
+
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Intent intent = getActivity().getIntent();
-        Uri uri = null;
-        if (intent != null) {
-            uri = Uri.parse(intent.getDataString());
+        if (intent == null || intent.getData() == null) {
+            return null;
         }
-        return new CursorLoader(getActivity(), uri, ForecastFragment.FORECAST_COLUMNS, null, null, null);
+        return new CursorLoader(
+                getActivity(),
+                intent.getData(),
+                ForecastFragment.FORECAST_COLUMNS,
+                null, null, null);
     }
 
     @Override

@@ -10,14 +10,17 @@ import android.view.MenuItem;
 
 public class DetailActivity extends ActionBarActivity {
 
+    public static final String DATE_KEY = "date";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        Fragment daf = new DetailActivityFragment();
-        ft.replace(R.id.container, daf);
-        ft.commit();
+        if (savedInstanceState == null) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.add(R.id.weather_detail_container, new DetailFragment());
+            ft.commit();
+        }
     }
 
 
