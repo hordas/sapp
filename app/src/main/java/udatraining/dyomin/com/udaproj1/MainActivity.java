@@ -24,7 +24,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements ForecastFragment.Callback {
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private final String DETAILFRAGMENT_TAG = "DFTAG";
@@ -40,13 +40,17 @@ public class MainActivity extends ActionBarActivity {
         if (findViewById(R.id.weather_detail_container) != null) {
             mTwoPane = true;
             if (savedInstanceState == null) {
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.weather_detail_container, new DetailFragment(), DETAILFRAGMENT_TAG);
-                ft.commit();
+                replaceDetailFragment(new DetailFragment());
             }
         } else {
             mTwoPane = false;
         }
+    }
+
+    private void replaceDetailFragment(DetailFragment df) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.weather_detail_container, df, DETAILFRAGMENT_TAG);
+        ft.commit();
     }
 
     @Override
@@ -112,6 +116,21 @@ public class MainActivity extends ActionBarActivity {
             startActivity(intent);
         } else {
             Log.d(LOG_TAG, "Couldn't call " + location + ", no receiving apps installed!");
+        }
+    }
+
+    @Override
+    public void onItemSelected(Uri dateUri) {
+        if (mTwoPane) {
+            Bundle args = new Bundle();
+            args.putParcelable(DetailFragment.DETAIL_URI, dateUri);
+            DetailFragment df = new DetailFragment();
+            df.setArguments(args);
+            replaceDetailFragment(df);
+        } else {
+            Intent intent = new Intent(this, DetailActivity.class);
+            intent.setData(dateUri);
+            startActivity(intent);
         }
     }
 }

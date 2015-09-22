@@ -29,7 +29,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private String forecastString;
     private final String FORECAST_SHARE_HASHTAG = " #SunshineApp";
     private final String LOG_TAG = DetailActivity.class.getSimpleName();
-    private final int DETAILS_LOADER = 1;
+    public static final int DETAILS_LOADER = 1;
+    public static final String DETAIL_URI = "detail_uri";
     private ShareActionProvider actionProvider;
     Uri mUri;
 
@@ -50,6 +51,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            mUri = arguments.getParcelable(DETAIL_URI);
+        }
+
         View v = inflater.inflate(R.layout.fragment_detail, container, false);
         dayTextview = (TextView) v.findViewById(R.id.textview_day_of_week_fragment_detail);
         dateTextview = (TextView) v.findViewById(R.id.textview_date_fragment_detail);
@@ -96,15 +102,14 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Intent intent = getActivity().getIntent();
-        if (intent == null || intent.getData() == null) {
-            return null;
+        if (null != mUri) {
+            return new CursorLoader(
+                    getActivity(),
+                    mUri,
+                    ForecastFragment.FORECAST_COLUMNS,
+                    null, null, null);
         }
-        return new CursorLoader(
-                getActivity(),
-                intent.getData(),
-                ForecastFragment.FORECAST_COLUMNS,
-                null, null, null);
+        return null;
     }
 
     @Override

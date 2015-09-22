@@ -69,6 +69,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     static final int COL_WEATHER_PRESSURE = 12;
 
     private ForecastAdapter mForecastAdapter;
+    private Callback callback;
 
     public ForecastFragment() {
     }
@@ -113,12 +114,20 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cursor cursor = (Cursor) parent.getItemAtPosition(position);
                 if (cursor != null) {
+                    //=============
+//                    String locationSetting = Utility.getPreferredLocation(getActivity());
+//                    Intent intent = new Intent(getActivity(), DetailActivity.class)
+//                            .setData(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
+//                                    locationSetting,
+//                                    cursor.getLong(ForecastFragment.COL_WEATHER_DATE)));
+//                    startActivity(intent);
+                    //==============
                     String locationSetting = Utility.getPreferredLocation(getActivity());
-                    Intent intent = new Intent(getActivity(), DetailActivity.class)
-                            .setData(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
-                                    locationSetting,
-                                    cursor.getLong(ForecastFragment.COL_WEATHER_DATE)));
-                    startActivity(intent);
+                    Uri weatherLocationWithDateUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
+                            locationSetting,
+                            cursor.getLong(ForecastFragment.COL_WEATHER_DATE));
+                    callback = (Callback) getActivity();
+                    callback.onItemSelected(weatherLocationWithDateUri);
                 }
             }
         });
@@ -157,6 +166,6 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     public interface Callback {
-        public void onItemSelected(Uri dateUri);
+        void onItemSelected(Uri dateUri);
     }
 }
