@@ -70,6 +70,8 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     private ForecastAdapter mForecastAdapter;
     private Callback callback;
+    private int position;
+    private ListView listView;
 
     public ForecastFragment() {
     }
@@ -107,7 +109,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         // Get a reference to the ListView, and attach this adapter to it.
-        ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
+        listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(mForecastAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -127,11 +129,14 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                             locationSetting,
                             cursor.getLong(ForecastFragment.COL_WEATHER_DATE));
                     callback = (Callback) getActivity();
-                    callback.onItemSelected(weatherLocationWithDateUri);
+                    callback.onItemSelected(weatherLocationWithDateUri, position);
                 }
             }
         });
         getLoaderManager().initLoader(0, null, this);
+        if (savedInstanceState != null) {
+            position = savedInstanceState.getInt(MainActivity.LIST_POSITION);
+        }
         return rootView;
     }
 
@@ -158,6 +163,9 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mForecastAdapter.swapCursor(data);
+        if (position != -1) {
+            listView.smoothScrollToPosition(position);
+        }
     }
 
     @Override
@@ -166,6 +174,6 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     public interface Callback {
-        void onItemSelected(Uri dateUri);
+        void onItemSelected(Uri dateUri, int position);
     }
 }

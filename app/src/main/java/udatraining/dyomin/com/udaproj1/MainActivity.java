@@ -30,6 +30,8 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
     private final String DETAILFRAGMENT_TAG = "DFTAG";
     private boolean mTwoPane;
     private String mLocation;
+    private int currentPosition;
+    public static String LIST_POSITION = "list_position";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,7 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
         } else {
             mTwoPane = false;
         }
+        currentPosition = -1;
     }
 
     private void replaceDetailFragment(DetailFragment df) {
@@ -120,7 +123,8 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
     }
 
     @Override
-    public void onItemSelected(Uri dateUri) {
+    public void onItemSelected(Uri dateUri, int position) {
+        currentPosition = position;
         if (mTwoPane) {
             Bundle args = new Bundle();
             args.putParcelable(DetailFragment.DETAIL_URI, dateUri);
@@ -132,5 +136,13 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
             intent.setData(dateUri);
             startActivity(intent);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        if (currentPosition != -1) {
+            savedInstanceState.putInt(LIST_POSITION, currentPosition);
+        }
+        super.onSaveInstanceState(savedInstanceState);
     }
 }
