@@ -15,7 +15,6 @@
  */
 package udatraining.dyomin.com.udaproj1;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -68,9 +67,10 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     static final int COL_WEATHER_DEGREES = 11;
     static final int COL_WEATHER_PRESSURE = 12;
 
+    private static final String LIST_POSITION = "listPosition";
     private ForecastAdapter mForecastAdapter;
     private Callback callback;
-    private int position;
+    private int mPosition;
     private ListView listView;
 
     public ForecastFragment() {
@@ -89,6 +89,14 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        if (mPosition != ListView.INVALID_POSITION) {
+            savedInstanceState.putInt(LIST_POSITION, mPosition);
+        }
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -99,6 +107,12 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        getLoaderManager().initLoader(0, null, this);
+        super.onActivityCreated(savedInstanceState);
     }
 
     @Override
@@ -116,26 +130,18 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cursor cursor = (Cursor) parent.getItemAtPosition(position);
                 if (cursor != null) {
-                    //=============
-//                    String locationSetting = Utility.getPreferredLocation(getActivity());
-//                    Intent intent = new Intent(getActivity(), DetailActivity.class)
-//                            .setData(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
-//                                    locationSetting,
-//                                    cursor.getLong(ForecastFragment.COL_WEATHER_DATE)));
-//                    startActivity(intent);
-                    //==============
                     String locationSetting = Utility.getPreferredLocation(getActivity());
                     Uri weatherLocationWithDateUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
                             locationSetting,
                             cursor.getLong(ForecastFragment.COL_WEATHER_DATE));
                     callback = (Callback) getActivity();
-                    callback.onItemSelected(weatherLocationWithDateUri, position);
+                    callback.onItemSelected(weatherLocationWithDateUri);
                 }
+                mPosition = position;
             }
         });
-        getLoaderManager().initLoader(0, null, this);
-        if (savedInstanceState != null) {
-            position = savedInstanceState.getInt(MainActivity.LIST_POSITION);
+        if (null != savedInstanceState && savedInstanceState.containsKey(LIST_POSITION)) {
+            mPosition = savedInstanceState.getInt(LIST_POSITION);
         }
         return rootView;
     }
@@ -163,8 +169,8 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mForecastAdapter.swapCursor(data);
-        if (position != -1) {
-            listView.smoothScrollToPosition(position);
+        if (mPosition != ListView.INVALID_POSITION) {
+            listView.smoothScrollToPosition(mPosition);
         }
     }
 
@@ -174,6 +180,6 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     public interface Callback {
-        void onItemSelected(Uri dateUri, int position);
+        public void onItemSelected(Uri dateUri);
     }
 }

@@ -1,5 +1,6 @@
 package udatraining.dyomin.com.udaproj1;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -17,10 +18,12 @@ public class DetailActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         if (savedInstanceState == null) {
-            DetailFragment df = new DetailFragment();
             Bundle bundle = new Bundle();
             bundle.putParcelable(DetailFragment.DETAIL_URI, getIntent().getData());
+
+            DetailFragment df = new DetailFragment();
             df.setArguments(bundle);
+
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.add(R.id.weather_detail_container, df);
             ft.commit();
@@ -31,6 +34,7 @@ public class DetailActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.detail, menu);
         return true;
     }
 
@@ -39,6 +43,12 @@ public class DetailActivity extends ActionBarActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 }

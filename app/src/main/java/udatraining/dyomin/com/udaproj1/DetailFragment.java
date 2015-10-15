@@ -67,7 +67,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         pressureTextview = (TextView) v.findViewById(R.id.textview_pressure_detail_fragment);
         image = (ImageView) v.findViewById(R.id.imageview_icon_detail_fragment);
 
-        getLoaderManager().initLoader(DETAILS_LOADER, null, this);
+        //getLoaderManager().initLoader(DETAILS_LOADER, null, this);
         return v;
     }
 
@@ -77,7 +77,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         MenuItem item = menu.findItem(R.id.action_share);
         actionProvider = (ShareActionProvider)
                 MenuItemCompat.getActionProvider(item);
-        if (actionProvider != null) {
+        if (forecastString != null) {
             actionProvider.setShareIntent(createShareIntent());
         }
     }
@@ -101,6 +101,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        getLoaderManager().initLoader(DETAILS_LOADER, null, this);
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         if (null != mUri) {
             return new CursorLoader(
@@ -114,7 +120,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (data.moveToFirst()) {
+        if (data != null && data.moveToFirst()) {
             boolean isMetric = Utility.isMetric(getActivity());
             long date = data.getLong(ForecastFragment.COL_WEATHER_DATE);
             String dayString = Utility.getDayName(getActivity(), date);
