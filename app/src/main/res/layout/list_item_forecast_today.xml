@@ -3,58 +3,74 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:gravity="center_vertical"
-    android:baselineAligned="false"
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:background="@drawable/today_touch_selector"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_weight="1"
+        android:layout_weight="7"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="60dp"
         android:gravity="center_horizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/list_item_date_textview"
-            android:textSize="@dimen/abc_text_size_menu_material"
-            android:padding="16dp"
-            android:layout_width="wrap_content"
+            android:text="Today"
+            android:fontFamily="sans-serif-condensed"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/list_item_high_textview"
-            android:textSize="@dimen/abc_text_size_large_material"
-            android:layout_width="wrap_content"
+            android:text="18°"
+            android:textSize="72sp"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         
         <TextView
             android:id="@+id/list_item_low_textview"
-            android:textSize="@dimen/abc_text_size_medium_material"
-            android:padding="16dp"
-            android:layout_width="wrap_content"
+            android:text="10°"
+            android:textSize="36sp"
+            android:textColor="@color/white"
+            android:layout_marginLeft="8sp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_weight="1"
-        android:layout_width="0dp"
+        android:layout_weight="5"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
+        android:layout_width="0dp"
+        android:layout_marginRight="16dp"
+        android:gravity="center_horizontal|bottom"
         tools:ignore="UseCompoundDrawables">
 
         <ImageView
             android:id="@+id/list_item_icon"
-            android:padding="16dp"
+            android:src="@mipmap/ic_launcher"
+            android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/list_item_forecast_textview"
-            android:textSize="@dimen/abc_text_size_medium_material"
-            android:padding="16dp"
+            android:text="Description"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@color/white"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 

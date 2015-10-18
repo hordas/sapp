@@ -8,39 +8,52 @@
 
     <LinearLayout
         android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:layout_gravity="left"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/textview_day_of_week_fragment_detail"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@color/black"
+            android:textSize="24sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/textview_date_fragment_detail"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@color/grey_700"
+            android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <LinearLayout
             android:orientation="horizontal"
-            android:gravity="center_vertical"
+            android:gravity="center_horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:baselineAligned="false">
 
             <LinearLayout
                 android:orientation="vertical"
-                android:layout_weight="1"
-                android:layout_width="0dp"
+                android:gravity="left"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/textview_max_temp_fragment_detail"
+                    android:fontFamily="sans-serif-condensed"
+                    android:textSize="96sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/textview_min_temp_fragment_detail"
+                    android:fontFamily="sans-serif-condensed"
+                    android:textSize="48sp"
+                    android:textColor="@color/grey_700"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
@@ -48,38 +61,54 @@
 
             <LinearLayout
                 android:orientation="vertical"
-                android:layout_weight="1"
-                android:layout_width="0dp"
                 android:gravity="center_horizontal"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/imageview_icon_detail_fragment"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:ignore="ContentDescription" />
 
                 <TextView
                     android:id="@+id/textview_forecast_description_detail_fragment"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:textColor="@color/grey_700"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
         </LinearLayout>
+        
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginRight="0dp"
+            android:layout_marginLeft="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/textview_humidity_detail_fragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/textview_humidity_detail_fragment"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/textview_wind_detail_fragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/textview_wind_detail_fragment"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:layout_marginTop="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/textview_pressure_detail_fragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/textview_pressure_detail_fragment"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:layout_marginTop="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
     </LinearLayout>
 
 </ScrollView>

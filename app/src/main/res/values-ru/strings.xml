@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="http://schemas.android.com/apk/res-auto">
+    <string name="today">Сегодня</string>
+    <string name="tomorrow">Завтра</string>
+
+    <!-- Wind format -->
+    <string name="format_wind_mph">
+        Ветер: <xliff:g id="speed">%1$1.0f</xliff:g>
+         м/с <xliff:g id="direction">%2$s</xliff:g>
+    </string>
+
+    <string name="format_wind_kmh">
+        Ветер: <xliff:g id="speed">%1$1.0f</xliff:g>
+         км/ч <xliff:g id="direction">%2$s</xliff:g>
+    </string>
+
+    <!-- Pressure format -->
+    <string name="pressure_format">Давление: <xliff:g id="pressure">%1.0f</xliff:g> ГПа</string>
+
+    <!-- Humidity format -->
+    <string name="format_humidity">Влажность: <xliff:g id="humidity">%1.0f</xliff:g> %%</string>
+
+</resources>

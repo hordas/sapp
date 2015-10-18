@@ -72,6 +72,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     private Callback callback;
     private int mPosition;
     private ListView listView;
+    private boolean mUseTodayLayout;
 
     public ForecastFragment() {
     }
@@ -81,6 +82,13 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         super.onCreate(savedInstanceState);
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
+    }
+
+    public void setUseTodayLayout(boolean useTodayLayout) {
+        mUseTodayLayout = useTodayLayout;
+        if (mForecastAdapter != null) {
+            mForecastAdapter.setmUseTodayLayout(useTodayLayout);
+        }
     }
 
     @Override
@@ -119,7 +127,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mForecastAdapter = new ForecastAdapter(getActivity(), null, 0);
-
+        mForecastAdapter.setmUseTodayLayout(mUseTodayLayout);
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         // Get a reference to the ListView, and attach this adapter to it.
