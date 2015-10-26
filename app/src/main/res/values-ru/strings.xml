@@ -3,6 +3,9 @@
     <string name="today">Сегодня</string>
     <string name="tomorrow">Завтра</string>
 
+    <string name="max">Максимальная температура <xliff:g id="max_temp">%1s</xliff:g></string>
+    <string name="min">Минимальная температура <xliff:g id="min_temp">%1s</xliff:g></string>
+
     <!-- Wind format -->
     <string name="format_wind_mph">
         Ветер: <xliff:g id="speed">%1$1.0f</xliff:g>

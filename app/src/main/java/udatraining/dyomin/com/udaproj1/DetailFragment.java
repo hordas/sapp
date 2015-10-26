@@ -43,6 +43,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private TextView windTextview;
     private TextView pressureTextview;
     private ImageView image;
+    private CompassView compassView;
 
     public DetailFragment() {
         setHasOptionsMenu(true);
@@ -66,6 +67,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         windTextview = (TextView) v.findViewById(R.id.textview_wind_detail_fragment);
         pressureTextview = (TextView) v.findViewById(R.id.textview_pressure_detail_fragment);
         image = (ImageView) v.findViewById(R.id.imageview_icon_detail_fragment);
+        compassView = (CompassView) v.findViewById(R.id.compassview);
 
         //getLoaderManager().initLoader(DETAILS_LOADER, null, this);
         return v;
@@ -145,6 +147,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             float degrees = data.getFloat(ForecastFragment.COL_WEATHER_DEGREES);
             String windString = Utility.getFormattedWind(getActivity(), windSpeed, degrees);
             windTextview.setText(windString);
+            compassView.setAngle(degrees);
 
             float pressure = data.getFloat(ForecastFragment.COL_WEATHER_PRESSURE);
             int pressureFormatId = R.string.pressure_format;

@@ -94,6 +94,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
+            <udatraining.dyomin.com.udaproj1.CompassView
+                android:id="@+id/compassview"
+                android:layout_width="100dp"
+                android:layout_height="100dp"/>
+
             <TextView
                 android:id="@+id/textview_wind_detail_fragment"
                 android:textAppearance="?android:textAppearanceLarge"

@@ -30,6 +30,9 @@
         <xliff:g id="day">%2$s</xliff:g>
     </string>
 
+    <string name="max">Max temperature <xliff:g id="max_temp">%1s</xliff:g></string>
+    <string name="min">Min temperature <xliff:g id="min_temp">%1s</xliff:g></string>
+
     <!-- Format temperature -->
     <string name="format_temperature"><xliff:g id="temp">%1.0f</xliff:g>\u00B0</string>
 
