@@ -147,7 +147,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             float degrees = data.getFloat(ForecastFragment.COL_WEATHER_DEGREES);
             String windString = Utility.getFormattedWind(getActivity(), windSpeed, degrees);
             windTextview.setText(windString);
-            compassView.setAngle(degrees);
+            compassView.setAngle(degrees, windSpeed);
 
             float pressure = data.getFloat(ForecastFragment.COL_WEATHER_PRESSURE);
             int pressureFormatId = R.string.pressure_format;

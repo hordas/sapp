@@ -3,10 +3,11 @@ package udatraining.dyomin.com.udaproj1;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityManager;
 
 public class CompassView extends View {
 
@@ -20,6 +21,9 @@ public class CompassView extends View {
     private double leftAngleRadians;
     private double rightAngleRadians;
     private Paint p;
+
+    private float angle;
+    private float speed;
 
     private float fullWidth;
     private float fullHeight;
@@ -55,7 +59,7 @@ public class CompassView extends View {
     private void readAttributes(Context c, AttributeSet attrs) {
         TypedArray a = c.getTheme().obtainStyledAttributes(attrs, R.styleable.CompassView, 0, 0);
         try {
-            setAngle(a.getInteger(R.styleable.CompassView_direction, 0));
+            setAngle(a.getInteger(R.styleable.CompassView_direction, 0), 0);
         } finally {
             a.recycle();
         }
@@ -63,6 +67,7 @@ public class CompassView extends View {
 
     public void init() {
         p = new Paint(Paint.ANTI_ALIAS_FLAG);
+        this.setFocusable(true);
     }
 
     @Override
@@ -121,13 +126,26 @@ public class CompassView extends View {
         }
     }
 
-    public void setAngle(double angle) {
+    public void setAngle(float angle, float windSpeed) {
+        this.angle = angle;
+        this.speed = windSpeed;
+
         this.mainAngleRadians = Math.toRadians(angle + CONSTANT_ANGLE);
         this.invertedMainAngle = Math.toRadians(angle + CONSTANT_ANGLE + 180);
         this.leftAngleRadians = Math.toRadians(angle + ANGLE_DEGREES + CONSTANT_ANGLE);
         this.rightAngleRadians = Math.toRadians(angle - ANGLE_DEGREES + CONSTANT_ANGLE);
 
+        AccessibilityManager am = (AccessibilityManager) getContext().getSystemService(Context.ACCESSIBILITY_SERVICE);
+        if (am.isEnabled()) {
+            sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED);
+        }
         invalidate();
+    }
+
+    @Override
+    public boolean dispatchPopulateAccessibilityEvent(AccessibilityEvent event) {
+        event.getText().add(Utility.getFormattedWind(getContext(), this.speed, this.angle));
+        return true;
     }
 
     private class CompassPoint {

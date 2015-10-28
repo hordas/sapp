@@ -41,6 +41,7 @@
             android:authorities="udatraining.dyomin.com.udaproj1"
             android:name=".data.WeatherProvider">
         </provider>
+        <service android:name=".service.SunshineService"/>
     </application>
 
 </manifest>
